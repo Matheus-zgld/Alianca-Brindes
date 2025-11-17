@@ -1,5 +1,3 @@
-# app.py
-
 import sqlite3
 import qrcode
 from io import BytesIO
