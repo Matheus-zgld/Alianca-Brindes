@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>📋 Detalhes do Resgate</h2>
+{% if resgatado %}
+    <h3 style="color: red; text-align: center;">ALERTA: BRINDE JÁ RESGATADO</h3>
+    <p style="text-align: center;">Este funcionário já retirou o brinde em: <strong>{{ funcionario.data_resgate }}</strong></p>
+{% else %}
+    <h3 style="color: green; text-align: center;">STATUS: PRONTO PARA RESGATE</h3>
+{% endif %}
+
+<p><strong>Nome:</strong> {{ funcionario.nome_completo }}</p>
+<p><strong>Matrícula:</strong> {{ funcionario.matricula }}</p>
+<p><strong>CPF:</strong> {{ funcionario.cpf }}</p>
+<hr>
+
+{% if not resgatado %}
+    <form method="POST" action="{{ url_for('dar_baixa') }}">
+        <input type="hidden" name="cpf" value="{{ funcionario.cpf }}">
+        <input type="hidden" name="matricula" value="{{ funcionario.matricula }}">
+        <input type="hidden" name="nome" value="{{ funcionario.nome_completo }}">
+        <input type="submit" value="CONFIRMAR ENTREGA E DAR BAIXA" style="background-color: green; color: white;">
+    </form>
+{% else %}
+    <p style="text-align: center; margin-top: 20px;">Não é possível dar baixa novamente.</p>
+{% endif %}
+{% endblock %}

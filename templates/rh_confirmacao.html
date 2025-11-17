@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="color: green;">✅ Baixa Concluída!</h2>
+<p style="text-align: center;">O brinde de <strong>{{ nome }}</strong> foi entregue e o registro foi **atualizado para RESGATADO** com sucesso.</p>
+<div style="text-align: center; margin-top: 30px;">
+    <a href="{{ url_for('rh_home') }}" style="color: var(--primary-color);">Voltar para Leitura</a>
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>🔑 Área de Baixa (RH)</h2>
+<p style="text-align: center;">Insira o código ou use a câmera para dar baixa no brinde.</p>
+{% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+<div id="reader" style="width: 100%; max-width: 400px; margin: 20px auto;"></div>
+
+<form method="POST" id="manual-form">
+    <label for="qr_data">Conteúdo do QR Code (Ex: 00000000000:12345)</label>
+    <input type="text" id="qr_data" name="qr_data" required>
+    <input type="submit" value="Verificar Brinde Manualmente">
+</form>
+
+<div style="text-align: center; margin-top: 20px;">
+    <a href="{{ url_for('funcionario_home') }}" style="color: var(--primary-color);">Acesso Funcionário</a>
+</div>
+
+<hr style="border-top: 1px solid var(--primary-color); margin: 30px 0;">
+
+<h3 style="color: var(--primary-color); margin-top: 10px; text-align: center;">✅ Brindes Entregues ({{ resgatados | length }})</h3>
+<div style="max-height: 400px; overflow-y: auto; border: 1px solid var(--primary-color); padding: 10px; border-radius: 5px; background-color: white;">
+    {% if resgatados %}
+    <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+        <thead style="background-color: var(--primary-color); color: var(--secondary-color);">
+            <tr>
+                <th style="padding: 8px; text-align: left;">Nome</th>
+                <th style="padding: 8px; text-align: left;">Matrícula</th>
+                <th style="padding: 8px; text-align: left;">Hora</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for func in resgatados %}
+            <tr style="background-color: {% if loop.index is even %}#f2f2f2{% else %}#ffffff{% endif %}; color: var(--primary-color);">
+                <td style="padding: 8px; color:#000080">{{ func.nome_completo }}</td>
+                <td style="padding: 8px; color:#000080">{{ func.matricula }}</td>
+                <td style="padding: 8px; color:#000080">{{ func.data_resgate.split(' ')[1] }}</td> </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; color: var(--primary-color);">Nenhum brinde foi resgatado ainda.</p>
+    {% endif %}
+</div>
+
+<script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+<script>
+    function onScanSuccess(decodedText, decodedResult) {
+        // Quando o código é lido, preenche o campo e envia o formulário
+        document.getElementById('qr_data').value = decodedText;
+        document.getElementById('manual-form').submit();
+        
+        // Para parar a câmera após a leitura:
+        html5QrcodeScanner.clear();
+    }
+
+    function onScanFailure(error) {
+        // console.error(`Code scan error = ${error}`);
+    }
+
+    // Inicializa o Scanner
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", // ID da div
+        { 
+            fps: 10, 
+            qrbox: {width: 250, height: 250},
+            facingMode: "environment" 
+        },
+        /* verbose= */ false
+    );
+    // Renderiza o Scanner na tela
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+</script>
+{% endblock %}

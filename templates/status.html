@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>🚫 Brinde Resgatado</h2>
+<p style="text-align: center;">Seu brinde já foi resgatado e registrado no sistema.</p>
+<div style="text-align: center;">
+    <p>Status: <strong style="color: green;">{{ status }}</strong></p>
+    <p>Data do Resgate: <strong>{{ data }}</strong></p>
+    <p>Obrigado e Boas Festas!</p>
+</div>
+<div style="text-align: center; margin-top: 20px;">
+    <a href="{{ url_for('funcionario_home') }}" style="color: var(--primary-color);">Voltar</a>
+</div>
+{% endblock %}

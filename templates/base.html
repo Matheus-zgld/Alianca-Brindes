@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resgate de Brinde de Fim de Ano</title>
+    <style>
+        /* Cores e Estilo */
+        :root {
+            --primary-color: {{ bg_color }}; /* Variável vinda do Python */
+            --secondary-color: {{ fg_color }}; /* Variável vinda do Python */
+            --light-text: #fff;
+            --dark-text: #333;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            margin-top: 50px;
+        }
+        h1, h2 {
+            color: var(--primary-color);
+            text-align: center;
+        }
+        input[type="text"], input[type="submit"], button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid var(--primary-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input[type="submit"], button {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover, button:hover {
+            background-color: #001f3f; /* Azul mais escuro */
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+        }
+        /* Estilos específicos do QR Code */
+        .qr-box {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            margin-top: 20px;
+            background-color: var(--light-text);
+        }
+        img.qr-code {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 15px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

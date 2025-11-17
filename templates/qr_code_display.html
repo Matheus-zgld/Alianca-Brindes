@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>✅ QR Code Gerado</h2>
+<p style="text-align: center;">Olá, <strong>{{ nome }}</strong>! Apresente este código no local de retirada do brinde.</p>
+<div class="qr-box">
+    <p>Seu Código de Resgate:</p>
+    <img src="{{ qr_code }}" alt="QR Code" class="qr-code">
+    
+    <p style="font-weight: bold; color: var(--primary-color);">
+        CÓDIGO: {{ qr_content }}
+    </p>
+    <p style="font-size: 0.8em; color: var(--dark-text);">Você pode gerar este código quantas vezes precisar.</p>
+</div>
+<div style="text-align: center; margin-top: 20px;">
+    <a href="{{ url_for('funcionario_home') }}" style="color: var(--primary-color);">Gerar Novamente</a>
+</div>
+{% endblock %}
