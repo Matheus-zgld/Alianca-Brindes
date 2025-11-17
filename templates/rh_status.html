@@ -1,26 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>📋 Detalhes do Resgate</h2>
+
 {% if resgatado %}
-    <h3 style="color: red; text-align: center;">ALERTA: BRINDE JÁ RESGATADO</h3>
+    <h3 style="color: #c00; text-align: center;">⚠️ ALERTA: BRINDE JÁ RESGATADO</h3>
     <p style="text-align: center;">Este funcionário já retirou o brinde em: <strong>{{ funcionario.data_resgate }}</strong></p>
 {% else %}
-    <h3 style="color: green; text-align: center;">STATUS: PRONTO PARA RESGATE</h3>
+    <h3 style="color: #080; text-align: center;">✅ STATUS: PRONTO PARA RESGATE</h3>
 {% endif %}
 
-<p><strong>Nome:</strong> {{ funcionario.nome_completo }}</p>
-<p><strong>Matrícula:</strong> {{ funcionario.matricula }}</p>
-<p><strong>CPF:</strong> {{ funcionario.cpf }}</p>
-<hr>
+<div style="background: #f9f9f9; padding: 16px; border-radius: 6px; margin: 16px 0;">
+    <p style="text-align:left; margin:8px 0;"><strong>Nome:</strong> {{ funcionario.nome_completo }}</p>
+    <p style="text-align:left; margin:8px 0;"><strong>Matrícula:</strong> {{ funcionario.matricula }}</p>
+    <p style="text-align:left; margin:8px 0;"><strong>CPF:</strong> {{ funcionario.cpf }}</p>
+</div>
 
 {% if not resgatado %}
-    <form method="POST" action="{{ url_for('dar_baixa') }}">
+    <form method="POST" action="{{ url_for('dar_baixa') }}" style="text-align: center;">
         <input type="hidden" name="cpf" value="{{ funcionario.cpf }}">
         <input type="hidden" name="matricula" value="{{ funcionario.matricula }}">
         <input type="hidden" name="nome" value="{{ funcionario.nome_completo }}">
-        <input type="submit" value="CONFIRMAR ENTREGA E DAR BAIXA" style="background-color: green; color: white;">
+        <button type="submit" style="background-color: #080; color: #fff; padding: 12px 20px; width: 100%; font-size: 1em; font-weight: 700;">CONFIRMAR ENTREGA E DAR BAIXA</button>
     </form>
 {% else %}
-    <p style="text-align: center; margin-top: 20px;">Não é possível dar baixa novamente.</p>
+    <p style="text-align: center; margin-top: 20px; color: #c00; font-weight: 700;">Não é possível dar baixa novamente.</p>
 {% endif %}
+
+<div class="btn-group" style="margin-top:20px;">
+    <a href="{{ url_for('rh_home') }}" class="theme-btn">Voltar</a>
+</div>
+
 {% endblock %}

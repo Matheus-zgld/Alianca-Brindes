@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>📜 Logs do Sistema</h2>
+<p style="text-align: center;">Visão completa dos eventos: geração de QR e baixas realizadas pelo RH.</p>
+
+<!-- Filtros -->
+<form method="GET" class="form-inline">
+    <input type="text" name="q" value="{{ q or '' }}" placeholder="Pesquisar (nome / CPF / matrícula)">
+    <select name="action">
+        <option value="">Todas Ações</option>
+        <option value="QR_GENERATED" {% if action_filter=='QR_GENERATED' %}selected{% endif %}>Geração de QR</option>
+        <option value="DAR_BAIXA" {% if action_filter=='DAR_BAIXA' %}selected{% endif %}>Dar Baixa</option>
+    </select>
+    <input type="date" name="date_from" value="{{ date_from or '' }}">
+    <input type="date" name="date_to" value="{{ date_to or '' }}">
+    <button type="submit" class="btn-primary">Pesquisar</button>
+</form>
+
+<!-- Logs QR Code -->
+<div style="margin-top:16px;">
+    <h3 style="color: var(--primary-color);">Logs de Geração de QR Code</h3>
+    <div class="table-wrap">
+    {% if qr_logs %}
+    <table class="responsive-table">
+        <thead>
+            <tr><th>Data</th><th>Hora</th><th>CPF</th><th>Matrícula</th><th>Nome</th><th>IP</th><th>User-Agent</th><th>Extra</th></tr>
+        </thead>
+        <tbody>
+        {% for r in qr_logs %}
+            <tr>
+                <td data-label="Data">{{ r.date }}</td>
+                <td data-label="Hora">{{ r.time }}</td>
+                <td data-label="CPF">{{ r.cpf }}</td>
+                <td data-label="Matrícula">{{ r.matricula }}</td>
+                <td data-label="Nome">{{ r.nome }}</td>
+                <td data-label="IP">{{ r.remote_addr }}</td>
+                <td data-label="User-Agent">{{ r.user_agent[:40] }}...</td>
+                <td data-label="Extra">{{ r.extra[:30] }}...</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; padding:16px;">Nenhum log de QR gerado encontrado.</p>
+    {% endif %}
+    </div>
+</div>
+
+<!-- Logs Dar Baixa -->
+<div style="margin-top:20px;">
+    <h3 style="color: var(--primary-color);">Logs de Dar Baixa</h3>
+    <div class="table-wrap">
+    {% if baixa_logs %}
+    <table class="responsive-table">
+        <thead>
+            <tr><th>Data</th><th>Hora</th><th>CPF</th><th>Matrícula</th><th>Nome</th><th>IP</th><th>User-Agent</th><th>RH</th></tr>
+        </thead>
+        <tbody>
+        {% for r in baixa_logs %}
+            <tr>
+                <td data-label="Data">{{ r.date }}</td>
+                <td data-label="Hora">{{ r.time }}</td>
+                <td data-label="CPF">{{ r.cpf }}</td>
+                <td data-label="Matrícula">{{ r.matricula }}</td>
+                <td data-label="Nome">{{ r.nome }}</td>
+                <td data-label="IP">{{ r.remote_addr }}</td>
+                <td data-label="User-Agent">{{ r.user_agent[:40] }}...</td>
+                <td data-label="RH">{{ r.extra.split(':')[-1] if r.extra else '-' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; padding:16px;">Nenhum log de baixa encontrado.</p>
+    {% endif %}
+    </div>
+</div>
+
+<div class="btn-group" style="margin-top:20px;">
+    <a href="{{ url_for('rh_home') }}" class="theme-btn">Voltar</a>
+</div>
+
+{% endblock %}

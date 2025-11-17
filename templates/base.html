@@ -7,14 +7,16 @@
     <style>
         /* Cores e Estilo */
         :root {
-            --primary-color: {{ bg_color }}; /* Variável vinda do Python */
-            --secondary-color: {{ fg_color }}; /* Variável vinda do Python */
+            --primary-color: {{ bg_color }};
+            --secondary-color: {{ fg_color }};
             --light-text: #fff;
             --dark-text: #333;
         }
 
+        * { box-sizing: border-box; }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             background-color: var(--primary-color);
@@ -24,67 +26,287 @@
             flex-direction: column;
             align-items: center;
         }
+
+        /* Logo */
+        .logo-wrapper {
+            text-align: center;
+            padding: 16px;
+            width: 100%;
+        }
+        .logo-wrapper img {
+            max-height: 100px;
+            display: inline-block;
+            margin: 0 auto;
+        }
+
         .container {
             background-color: var(--secondary-color);
             color: var(--primary-color);
-            padding: 30px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 500px;
-            margin-top: 50px;
+            width: 95%;
+            max-width: 900px;
+            margin: 10px auto;
+            margin-bottom: 30px;
         }
-        h1, h2 {
+
+        h1, h2, h3 {
             color: var(--primary-color);
             text-align: center;
+            margin: 10px 0;
         }
-        input[type="text"], input[type="submit"], button {
-            width: 100%;
+
+        h2 { font-size: 1.6em; }
+        h3 { font-size: 1.2em; }
+
+        p { text-align: center; margin: 10px 0; }
+
+        /* Inputs and Forms */
+        input[type="text"],
+        input[type="date"],
+        select {
             padding: 10px;
-            margin: 8px 0;
-            display: inline-block;
+            margin: 6px 0;
             border: 1px solid var(--primary-color);
             border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 16px;
+            font-size: 14px;
+            background-color: #fff;
+            color: #000;
+            width: 100%;
         }
-        input[type="submit"], button {
-            background-color: var(--primary-color);
-            color: var(--secondary-color);
+
+        input[type="submit"],
+        button {
+            padding: 10px 16px;
+            margin: 6px 4px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        input[type="submit"]:hover, button:hover {
-            background-color: #001f3f; /* Azul mais escuro */
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            font-weight: 700;
         }
+
+        .btn-primary:hover {
+            background-color: #001f3f;
+        }
+
+        .theme-btn {
+            background: #000080;
+            color: #FFD700;
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .theme-btn:hover {
+            background-color: #000050;
+        }
+
+        /* Button groups */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        /* Error and Success messages */
         .error {
-            color: red;
+            color: #c00;
             font-weight: bold;
             text-align: center;
+            padding: 10px;
+            background: #ffe6e6;
+            border-radius: 4px;
+            margin: 10px 0;
         }
+
         .success {
-            color: green;
+            color: #080;
             font-weight: bold;
             text-align: center;
+            padding: 10px;
+            background: #e6ffe6;
+            border-radius: 4px;
+            margin: 10px 0;
         }
-        /* Estilos específicos do QR Code */
+
+        /* QR Code box */
         .qr-box {
             text-align: center;
             padding: 20px;
             border: 2px solid var(--primary-color);
             border-radius: 8px;
             margin-top: 20px;
-            background-color: var(--light-text);
+            background-color: #fff;
         }
+
         img.qr-code {
             max-width: 100%;
             height: auto;
             display: block;
             margin: 15px auto;
         }
+
+        /* Tables */
+        .table-wrap {
+            overflow-x: auto;
+            margin: 16px 0;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .responsive-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            color: #000;
+            font-size: 0.95em;
+            min-width: 600px;
+        }
+
+        .responsive-table thead {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+        }
+
+        .responsive-table th,
+        .responsive-table td {
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .responsive-table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .responsive-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+                margin: 8px auto;
+                width: 98%;
+                max-width: 100%;
+            }
+
+            h2 { font-size: 1.4em; }
+            h3 { font-size: 1.1em; }
+
+            input[type="text"],
+            input[type="date"],
+            select {
+                width: 100%;
+                max-width: 100%;
+                margin: 6px 0;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .theme-btn,
+            input[type="submit"],
+            button {
+                width: 100%;
+            }
+
+            .responsive-table {
+                min-width: 100%;
+                font-size: 0.85em;
+            }
+
+            .responsive-table th,
+            .responsive-table td {
+                padding: 8px 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+                border-radius: 6px;
+            }
+
+            h2 { font-size: 1.2em; margin: 8px 0; }
+            h3 { font-size: 1em; }
+
+            input[type="text"],
+            input[type="date"],
+            select {
+                font-size: 16px;
+            }
+
+            .responsive-table {
+                min-width: 100%;
+                font-size: 0.8em;
+            }
+
+            .responsive-table th,
+            .responsive-table td {
+                padding: 6px 4px;
+            }
+
+            .theme-btn {
+                padding: 8px 12px;
+                font-size: 0.9em;
+            }
+        }
+
+        /* Form containers */
+        .form-inline {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .form-inline input,
+        .form-inline select,
+        .form-inline button {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        @media (max-width: 768px) {
+            .form-inline {
+                flex-direction: column;
+            }
+
+            .form-inline input,
+            .form-inline select,
+            .form-inline button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
+    {% if logo_url %}
+    <div class="logo-wrapper">
+        <img src="{{ logo_url }}" alt="Logo">
+    </div>
+    {% endif %}
     <div class="container">
         {% block content %}{% endblock %}
     </div>

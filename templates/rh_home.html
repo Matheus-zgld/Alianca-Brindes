@@ -2,39 +2,54 @@
 {% block content %}
 <h2>🔑 Área de Baixa (RH)</h2>
 <p style="text-align: center;">Insira o código ou use a câmera para dar baixa no brinde.</p>
+
+{% if rh_user %}
+<div style="text-align:center; margin-bottom:10px; font-size:0.9em;">
+    <strong>Conectado como:</strong> {{ rh_user }}
+</div>
+{% endif %}
+
 {% if error %}<p class="error">{{ error }}</p>{% endif %}
 
-<div id="reader" style="width: 100%; max-width: 400px; margin: 20px auto;"></div>
+<div id="reader" style="width: 100%; max-width: 400px; margin: 16px auto;"></div>
 
-<form method="POST" id="manual-form">
-    <label for="qr_data">Conteúdo do QR Code (Ex: 00000000000:12345)</label>
-    <input type="text" id="qr_data" name="qr_data" required>
-    <input type="submit" value="Verificar Brinde Manualmente">
+<form method="POST" id="manual-form" style="text-align: center;">
+    <label for="qr_data" style="display:block; text-align:left; font-weight:600;">Conteúdo do QR Code</label>
+    <input type="text" id="qr_data" name="qr_data" placeholder="Ex: 00000000000:12345" required>
+    <button type="submit" class="btn-primary" style="width: 100%; margin-top:8px;">Verificar Brinde</button>
 </form>
 
-<div style="text-align: center; margin-top: 20px;">
-    <a href="{{ url_for('funcionario_home') }}" style="color: var(--primary-color);">Acesso Funcionário</a>
+<!-- Menu de botões RH -->
+<div class="btn-group" style="margin-top:20px;">
+    <a href="{{ url_for('funcionario_home') }}" class="theme-btn">Acesso Funcionário</a>
+    <a href="{{ url_for('rh_logs') }}" class="theme-btn">Ver Logs</a>
+    <a href="{{ url_for('rh_funcionarios') }}" class="theme-btn">Verificar Funcionários</a>
+    <a href="{{ url_for('rh_logout') }}" class="theme-btn" style="background: #c00;">Sair</a>
 </div>
 
-<hr style="border-top: 1px solid var(--primary-color); margin: 30px 0;">
+<hr style="border-top: 1px solid var(--primary-color); margin: 20px 0;">
 
-<h3 style="color: var(--primary-color); margin-top: 10px; text-align: center;">✅ Brindes Entregues ({{ resgatados | length }})</h3>
-<div style="max-height: 400px; overflow-y: auto; border: 1px solid var(--primary-color); padding: 10px; border-radius: 5px; background-color: white;">
+<h3 style="color: var(--primary-color); margin-top: 10px;">✅ Brindes Entregues ({{ resgatados | length }})</h3>
+
+<div class="table-wrap">
     {% if resgatados %}
-    <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
-        <thead style="background-color: var(--primary-color); color: var(--secondary-color);">
+    <table class="responsive-table">
+        <thead>
             <tr>
-                <th style="padding: 8px; text-align: left;">Nome</th>
-                <th style="padding: 8px; text-align: left;">Matrícula</th>
-                <th style="padding: 8px; text-align: left;">Hora</th>
+                <th>Nome</th>
+                <th>Matrícula</th>
+                <th>Data</th>
+                <th>Hora</th>
             </tr>
         </thead>
         <tbody>
             {% for func in resgatados %}
-            <tr style="background-color: {% if loop.index is even %}#f2f2f2{% else %}#ffffff{% endif %}; color: var(--primary-color);">
-                <td style="padding: 8px; color:#000080">{{ func.nome_completo }}</td>
-                <td style="padding: 8px; color:#000080">{{ func.matricula }}</td>
-                <td style="padding: 8px; color:#000080">{{ func.data_resgate.split(' ')[1] }}</td> </tr>
+            <tr>
+                <td data-label="Nome">{{ func.nome_completo }}</td>
+                <td data-label="Matrícula">{{ func.matricula }}</td>
+                <td data-label="Data">{{ func.data_resgate.split(' ')[0] }}</td>
+                <td data-label="Hora">{{ func.data_resgate.split(' ')[1] }}</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
@@ -46,11 +61,8 @@
 <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 <script>
     function onScanSuccess(decodedText, decodedResult) {
-        // Quando o código é lido, preenche o campo e envia o formulário
         document.getElementById('qr_data').value = decodedText;
         document.getElementById('manual-form').submit();
-        
-        // Para parar a câmera após a leitura:
         html5QrcodeScanner.clear();
     }
 
@@ -58,17 +70,11 @@
         // console.error(`Code scan error = ${error}`);
     }
 
-    // Inicializa o Scanner
     let html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader", // ID da div
-        { 
-            fps: 10, 
-            qrbox: {width: 250, height: 250},
-            facingMode: "environment" 
-        },
-        /* verbose= */ false
+        "reader",
+        { fps: 10, qrbox: {width: 250, height: 250}, facingMode: "environment" },
+        false
     );
-    // Renderiza o Scanner na tela
     html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 </script>
 {% endblock %}
