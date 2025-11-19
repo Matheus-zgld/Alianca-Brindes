@@ -48,7 +48,13 @@ def log_event(action, cpf=None, matricula=None, nome=None, extra=None):
     """Registra um evento no arquivo CSV com dados relevantes."""
     header = ['timestamp', 'action', 'cpf', 'matricula', 'nome', 'remote_addr', 'user_agent', 'extra']
     ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    remote = request.remote_addr if request else ''
+    
+    remote = ''
+    if request:
+        # Tenta obter o IP real do cliente, considerando proxies (X-Forwarded-For).
+        # Se o cabeçalho existir, pega o primeiro IP da lista (o do cliente original).
+        remote = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
+
     ua = request.headers.get('User-Agent') if request and request.headers else ''
 
     write_header = not os.path.exists(LOG_FILE)
@@ -74,8 +80,16 @@ def imgs(filename):
 def check_auth(username, password):
     """Esta função deve ser usada para verificar se um nome de usuário/senha
     dado é válido."""
-    # A senha é hardcoded aqui, mas em produção deve estar em variáveis de ambiente.
-    return username == 'rhadmin' and password == 'rhadmin1927'
+    # As senhas são hardcoded aqui, mas em produção devem estar em variáveis de ambiente ou em um banco de dados seguro.
+    rh_users = {
+        'rhadmin': 'rhadmin1927',
+        'jose.neto': 'alianca1927',
+        'sara.guimaraes': 'alianca1927',
+        'patricia.simoes': 'alianca1927',
+        'liberato.silva': 'alianca1927'
+    }
+    # Verifica se o usuário existe no dicionário e se a senha fornecida corresponde.
+    return username in rh_users and rh_users[username] == password
 
 def authenticate():
     """Envia uma resposta para o cliente pedindo autenticação."""
@@ -87,18 +101,22 @@ def requires_auth(f):
     """O decorador que verifica o cabeçalho de autenticação e a sessão."""
     @wraps(f)
     def decorated(*args, **kwargs):
-        auth = request.authorization
-        
-        # Se o usuário foi deslogado, mas ainda NÃO forneceu credenciais, pede login
-        if session.get('logged_out') == True and not auth:
+        # Se o usuário acabou de fazer logout, força a reautenticação.
+        if session.get('logout_flag'):
+            session.pop('logout_flag', None) # Limpa a flag
             return authenticate()
-        
-        # Se não tem autenticação (e não foi deslogado), pede login
+
+        # Se o usuário já tem uma sessão válida, permite o acesso.
+        if session.get('rh_user'):
+            return f(*args, **kwargs)
+
+        auth = request.authorization
+        # Se não há credenciais ou se são inválidas, pede autenticação.
         if not auth or not check_auth(auth.username, auth.password):
             return authenticate()
         
-        # Se passou na autenticação, marca que NÃO está deslogado
-        session['logged_out'] = False
+        # Se a autenticação foi bem-sucedida, armazena o usuário na sessão.
+        session['rh_user'] = auth.username
         return f(*args, **kwargs)
     return decorated
 
@@ -262,14 +280,15 @@ def rh_home():
     # Passa username para exibir / usar no log se necessário
     username = request.authorization.username if request.authorization else ''
     # Mantemos as mesmas cores da área do funcionário (azul/amarillo)
-    return render_template('rh_home.html', resgatados=resgatados, bg_color='#000080', fg_color='#FFD700', logo_url='/imgs/logo.png', rh_user=username)
+    return render_template('rh_home.html', resgatados=resgatados, bg_color='#000080', fg_color='#FFD700', logo_url='/imgs/logo.png', rh_user=session.get('rh_user', ''))
 
 
 @app.route('/rh_logout')
 def rh_logout():
-    # Marca como deslogado na sessão
-    session['logged_out'] = True
-    # Redireciona para a página de funcionário
+    """Realiza o logout do usuário da área do RH."""
+    # Limpa o usuário da sessão e define uma flag para forçar a reautenticação.
+    session.pop('rh_user', None)
+    session['logout_flag'] = True
     return redirect(url_for('funcionario_home'))
 
 
@@ -403,4 +422,4 @@ def dar_baixa():
 if __name__ == '__main__':
     # Para rodar localmente, use: python app.py
     # O comando "pip install flask qrcode" deve ser executado antes.
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
