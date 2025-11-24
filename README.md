@@ -41,3 +41,28 @@ Este é um sistema web simples e robusto, desenvolvido em **Python/Flask**, para
     ├── rh_status.html
     └── rh_confirmacao.html
 ```
+
+  -----
+
+  ## 🔁 Conversão para PHP
+
+  Este repositório foi convertido de uma aplicação Python/Flask para PHP para facilitar a implantação em ambientes onde PHP é mais conveniente.
+
+  - Arquivos Python originais foram movidos para `old_python_backup/` como backup.
+  - Páginas principais agora são PHP: `index.php`, `rh.php`, `dar_baixa.php`, `rh_logs.php`, `rh_funcionarios.php`, etc.
+
+  ## ▶️ Como rodar localmente (PHP)
+
+  1. Certifique-se de ter PHP instalado (>= 7.4 ou 8.x).
+  2. Na raiz do projeto, execute:
+
+  ```powershell
+  php -S 0.0.0.0:8000 -t .
+  ```
+
+  3. Abra no navegador: `http://localhost:8000/`
+
+  Observações:
+  - A geração de QR usa a API pública do Google Charts (requere internet). Se preferir geração local, posso adicionar uma biblioteca PHP para isso.
+  - O banco `brindes.db` foi atualizado e um backup está em `brindes.db.bak`.
+
