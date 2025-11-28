@@ -6,7 +6,7 @@ function render_content(){
 
     <?php if($resgatado): ?>
         <h3 style="color:#c00; text-align:center;">⚠️ ALERTA: BRINDE JÁ RESGATADO</h3>
-        <p style="text-align:center;">Este funcionário já retirou o brinde em: <strong><?= htmlspecialchars($funcionario['data_resgate']) ?></strong></p>
+        <p style="text-align:center;">Este funcionário já retirou o brinde em: <strong><?php $ts=$funcionario['data_resgate']; echo htmlspecialchars(date('d-m-y H:i:s', strtotime($ts))); ?></strong></p>
     <?php else: ?>
         <h3 style="color:#080; text-align:center;">✅ STATUS: PRONTO PARA RESGATE</h3>
     <?php endif; ?>

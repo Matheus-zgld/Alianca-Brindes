@@ -1,9 +1,13 @@
 <?php
 // Funções utilitárias para a aplicação em PHP
-session_start();
 
-define('DB_PATH', __DIR__ . '/../brindes.db');
-define('LOG_FILE', __DIR__ . '/../data_log.csv');
+// Carrega arquivo de configuração
+require_once __DIR__ . '/../config.php';
+
+// Inicia sessão se ainda não foi iniciada
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 function get_db() {
     $dsn = 'sqlite:' . DB_PATH;
@@ -149,28 +153,13 @@ function validate_cpf($cpf) {
 }
 
 function rh_authenticate() {
-    $rh_users = [
-        'rhadmin' => 'rhadmin1927',
-        'jose.neto' => 'alianca1927',
-        'sara.guimaraes' => 'alianca1927',
-        'patricia.simoes' => 'alianca1927',
-        'liberato.silva' => 'alianca1927'
-    ];
-
-    if(!empty($_SESSION['rh_user'])) return true;
-
-    if(!empty($_SERVER['PHP_AUTH_USER'])) {
-        $u = $_SERVER['PHP_AUTH_USER'];
-        $p = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
-        if(array_key_exists($u, $rh_users) && $rh_users[$u] === $p) {
-            $_SESSION['rh_user'] = $u;
-            return true;
-        }
+    // Verifica se usuário está autenticado na sessão
+    if(!empty($_SESSION['rh_user'])) {
+        return true;
     }
-
-    header('WWW-Authenticate: Basic realm="Login Obrigatório"');
-    header('HTTP/1.0 401 Unauthorized');
-    echo 'Autenticação obrigatória.';
+    
+    // Não autenticado: redireciona para login
+    header('Location: /rh_login.php');
     exit;
 }
 

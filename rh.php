@@ -2,7 +2,9 @@
 require_once __DIR__ . '/inc/functions.php';
 rh_authenticate();
 
-$bg_color = '#000080'; $fg_color = '#FFD700'; $logo_url = '/imgs/logo.png';
+$bg_color = BG_COLOR;
+$fg_color = FG_COLOR;
+$logo_url = LOGO_URL;
 
 $pdo = get_db();
 $stmt = $pdo->query('SELECT nome_completo, matricula, cpf, data_resgate FROM funcionarios WHERE brinde_status = 1 ORDER BY data_resgate DESC');

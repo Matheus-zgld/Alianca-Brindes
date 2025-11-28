@@ -6,13 +6,13 @@ function render_content(){
     <p style="text-align:center;">Preencha seus dados para gerar o QR Code de resgate.</p>
     <?php if(!empty($error)): ?><p class="error"><?= htmlspecialchars($error) ?></p><?php endif; ?>
 
-    <form method="POST" style="text-align:center;">
-        <div style="text-align:center; margin-bottom:14px;">
+    <form method="POST" style="text-align:center; max-width:500px; margin:0 auto;">
+        <div style="text-align:center; margin-bottom:20px;">
             <input type="radio" id="id_cpf" name="identifier" value="cpf" checked style="display:none">
             <input type="radio" id="id_mat" name="identifier" value="matricula" style="display:none">
             <div style="display:inline-block; border-radius:8px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.15); background: #fff;">
-                <label for="id_cpf" class="toggle-btn" style="padding:10px 20px; cursor:pointer; display:inline-block; background:#000080; color:#FFD700; font-weight:600; border:none; margin:0; transition:all 0.15s;">CPF</label>
-                <label for="id_mat" class="toggle-btn" style="padding:10px 20px; cursor:pointer; display:inline-block; background:#ffffff; color:#000080; font-weight:600; border:none; margin:0; transition:all 0.15s;">Matrícula</label>
+                <label for="id_cpf" class="toggle-btn" style="padding:12px 30px; cursor:pointer; display:inline-block; background:#000080; color:#FFD700; font-weight:600; border:none; margin:0; transition:all 0.15s; text-align:center;">CPF</label>
+                <label for="id_mat" class="toggle-btn" style="padding:12px 30px; cursor:pointer; display:inline-block; background:#ffffff; color:#000080; font-weight:600; border:none; margin:0; transition:all 0.15s; text-align:center;">Matrícula</label>
             </div>
         </div>
 
@@ -29,11 +29,11 @@ function render_content(){
             <input type="text" id="matricula" name="matricula" placeholder="Digite sua matrícula">
         </div>
 
-        <button type="submit" class="btn-primary" style="width:100%; margin-top:16px;">Consultar/Gerar QR Code</button>
+        <button type="submit" class="btn-primary" style="width:100%; margin-top:20px; padding:14px; text-align:center; font-size:16px;">Consultar/Gerar QR Code</button>
     </form>
 
-    <div class="btn-group" style="margin-top:20px;">
-        <a href="/rh.php" class="theme-btn">Acesso RH</a>
+    <div class="btn-group" style="margin-top:25px; text-align:center;">
+        <a href="/rh_login.php" class="theme-btn" style="display:inline-block; min-width:200px; text-align:center; padding:12px 24px;">Acesso RH</a>
     </div>
 
     <style>

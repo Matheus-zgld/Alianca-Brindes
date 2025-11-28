@@ -16,6 +16,18 @@ function render_content(){
                 $date_part = $parts[0] ?? '';
                 $time_part = $parts[1] ?? '';
                 $entry2 = ['timestamp'=>$ts,'date'=>$date_part,'time'=>$time_part,'action'=>$action,'cpf'=>$entry['cpf'] ?? '','matricula'=>$entry['matricula'] ?? '','nome'=>$entry['nome'] ?? '','remote_addr'=>$entry['remote_addr'] ?? '','user_agent'=>$entry['user_agent'] ?? '','extra'=>$entry['extra'] ?? ''];
+                // Formata data para DD-MM-YY para exibição
+                if(!empty($entry2['date'])){
+                    $dtObj = DateTime::createFromFormat('Y-m-d', $entry2['date']);
+                    if($dtObj){
+                        $entry2['display_date'] = $dtObj->format('d-m-y');
+                    } else {
+                        // Tenta outros formatos se necessário
+                        $entry2['display_date'] = $entry2['date'];
+                    }
+                } else {
+                    $entry2['display_date'] = '';
+                }
                 if($action_filter && $action_filter != $action) continue;
                 if(!empty($date_from) && $entry2['date'] && $entry2['date'] < $date_from) continue;
                 if(!empty($date_to) && $entry2['date'] && $entry2['date'] > $date_to) continue;
@@ -52,7 +64,7 @@ function render_content(){
     <table class="responsive-table"><thead><tr><th>Data</th><th>Hora</th><th>CPF</th><th>Matrícula</th><th>Nome</th><th>IP</th><th>User-Agent</th><th>Extra</th></tr></thead><tbody>
     <?php foreach(array_reverse($qr_logs) as $r): ?>
         <tr>
-            <td data-label="Data"><?= htmlspecialchars($r['date']) ?></td>
+            <td data-label="Data"><?= htmlspecialchars($r['display_date']) ?></td>
             <td data-label="Hora"><?= htmlspecialchars($r['time']) ?></td>
             <td data-label="CPF"><?= htmlspecialchars($r['cpf']) ?></td>
             <td data-label="Matrícula"><?= htmlspecialchars($r['matricula']) ?></td>
@@ -71,7 +83,7 @@ function render_content(){
     <table class="responsive-table"><thead><tr><th>Data</th><th>Hora</th><th>CPF</th><th>Matrícula</th><th>Nome</th><th>IP</th><th>User-Agent</th><th>RH</th></tr></thead><tbody>
     <?php foreach(array_reverse($baixa_logs) as $r): ?>
         <tr>
-            <td data-label="Data"><?= htmlspecialchars($r['date']) ?></td>
+            <td data-label="Data"><?= htmlspecialchars($r['display_date']) ?></td>
             <td data-label="Hora"><?= htmlspecialchars($r['time']) ?></td>
             <td data-label="CPF"><?= htmlspecialchars($r['cpf']) ?></td>
             <td data-label="Matrícula"><?= htmlspecialchars($r['matricula']) ?></td>

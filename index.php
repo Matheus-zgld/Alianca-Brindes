@@ -1,9 +1,9 @@
 <?php
 require_once __DIR__ . '/inc/functions.php';
 
-$bg_color = '#000080';
-$fg_color = '#FFD700';
-$logo_url = '/imgs/logo.png';
+$bg_color = BG_COLOR;
+$fg_color = FG_COLOR;
+$logo_url = LOGO_URL;
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $identifier = isset($_POST['identifier']) ? $_POST['identifier'] : 'cpf';
@@ -13,13 +13,18 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pdo = get_db();
     try {
         if($identifier === 'cpf') {
-            if(!validate_cpf($cpf)) {
+            // Normaliza o CPF (remove formatação)
+            $cpf_clean = preg_replace('/\D/', '', $cpf);
+            
+            if(!validate_cpf($cpf_clean)) {
                 $error = 'CPF inválido. Verifique o número e tente novamente.';
                 include __DIR__ . '/templates/funcionario_home.php';
                 exit;
             }
+            
+            // Busca no banco com CPF normalizado
             $stmt = $pdo->prepare('SELECT * FROM funcionarios WHERE cpf = ?');
-            $stmt->execute([$cpf]);
+            $stmt->execute([$cpf_clean]);
             $func = $stmt->fetch(PDO::FETCH_ASSOC);
         } else {
             if($matricula === '') {
@@ -45,7 +50,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if(intval($func['brinde_status']) === 1) {
         $status = 'RESGATADO';
-        $data = $func['data_resgate'];
+        $data = date('d-m-y H:i:s', strtotime($func['data_resgate']));
         include __DIR__ . '/templates/status.php';
         exit;
     }

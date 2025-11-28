@@ -20,5 +20,7 @@ if($status === '0' || $status === '1'){
 }
 
 // Render simple page
-$bg_color = '#000080'; $fg_color = '#FFD700'; $logo_url = '/imgs/logo.png';
+$bg_color = BG_COLOR;
+$fg_color = FG_COLOR;
+$logo_url = LOGO_URL;
 include __DIR__ . '/templates/rh_funcionarios.php';
