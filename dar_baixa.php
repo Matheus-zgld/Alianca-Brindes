@@ -25,7 +25,7 @@ $data_hora = date('Y-m-d H:i:s');
 $update = $pdo->prepare('UPDATE funcionarios SET brinde_status = 1, data_resgate = ? WHERE cpf = ? AND matricula = ? AND brinde_status = 0');
 $update->execute([$data_hora, $cpf, $matricula]);
 
-try { log_event('DAR_BAIXA', $cpf, $matricula, $func['nome_completo'], 'Baixa confirmada por RH: ' . ($_SESSION['rh_user'] ?? '-')); } catch(Exception) {}
+try { log_event('DAR_BAIXA', $cpf, $matricula, $func['nome_completo'], 'Baixa confirmada por RH: ' . ($_SESSION['rh_user'] ?? '-')); } catch(Exception $e) {}
 
 $nome = $nome ?: $func['nome_completo'];
 include __DIR__ . '/templates/rh_confirmacao.php';

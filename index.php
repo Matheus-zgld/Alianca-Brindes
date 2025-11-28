@@ -63,7 +63,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     $qr_url = generate_qr_url($qr_data, 300);
-    try { log_event('QR_GENERATED', $func['cpf'], $func['matricula'], $func['nome_completo'], 'QR gerado pelo funcionário'); } catch(Exception) {}
+    try { log_event('QR_GENERATED', $func['cpf'], $func['matricula'], $func['nome_completo'], 'QR gerado pelo funcionário'); } catch(Exception $e) {}
 
     $nome = $func['nome_completo'];
     $qr_content = $qr_data;
