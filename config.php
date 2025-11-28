@@ -19,7 +19,7 @@ define('BASE_PATH', __DIR__);
 // Em produção: http://brindes.alianca.ind.br
 // Em desenvolvimento localhost: http://localhost:8000
 // Em desenvolvimento rede local: http://192.168.0.26:8000
-define('BASE_URL', 'http://192.168.0.26:8000');
+define('BASE_URL', 'http://brindes.alianca.ind.br');
 
 // ========== CONFIGURAÇÕES DE BANCO DE DADOS ==========
 
