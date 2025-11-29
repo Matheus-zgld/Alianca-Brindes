@@ -20,6 +20,14 @@ try {
             $error='Brinde já entregue';
         } else {
             $pdo->prepare('UPDATE funcionarios SET brinde_status=1, data_resgate=datetime("now","localtime") WHERE cpf=? AND matricula=?')->execute([$cpf,$matricula]);
+            $log_file=__DIR__.'/data_log.csv';
+            $ts=date('Y-m-d H:i:s');
+            $remote=isset($_SERVER['REMOTE_ADDR'])?$_SERVER['REMOTE_ADDR']:'';
+            $ua=isset($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';
+            $rh_user=$_SESSION['rh_user'];
+            $fh=fopen($log_file,'a');
+            fputcsv($fh,[$ts,'DAR_BAIXA',$cpf,$matricula,$f['nome_completo'],$remote,$ua,'Baixa confirmada por RH: '.$rh_user]);
+            fclose($fh);
             $info='Brinde entregue com sucesso';
         }
     }
@@ -162,8 +170,14 @@ document.addEventListener('DOMContentLoaded',function(){
             document.getElementById('fileInput').addEventListener('change',function(e){
                 var file=e.target.files[0];
                 if(file){
+                    reader.innerHTML='<p style="text-align:center;color:#000080;margin:20px 0">Processando imagem...</p>';
                     var html5QrCode=new Html5Qrcode('reader');
-                    html5QrCode.scanFile(file,true).then(function(txt){onSuccess(txt);}).catch(function(err){alert('Erro ao ler QR Code. Tente novamente.');});
+                    html5QrCode.scanFile(file,true).then(function(txt){
+                        onSuccess(txt);
+                    }).catch(function(err){
+                        reader.innerHTML='<div style="background:#ffecec;color:#b00020;padding:12px;border-radius:8px;margin:10px 0;text-align:center">Erro ao ler QR Code. Tente novamente com melhor iluminação.</div><input type="file" accept="image/*" capture="environment" style="width:100%;padding:15px;border:2px dashed #000080;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;margin-top:10px" id="fileInput2">';
+                        document.getElementById('fileInput2').addEventListener('change',arguments.callee);
+                    });
                 }
             });
         }else{
