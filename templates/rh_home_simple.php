@@ -3,7 +3,7 @@ function render_content(){
     global $resgatados, $error;
     ?>
     <h2>🔑 Área de Baixa (RH)</h2>
-    <p style="text-align:center;">Insira o código do QR manualmente.</p>
+    <p style="text-align:center;">Escaneie o QR Code ou insira o código manualmente.</p>
 
     <?php if(!empty($_SESSION['rh_user'])): ?>
     <div style="text-align:center; margin-bottom:15px; font-size:0.9em; color: var(--primary-color);"><strong>Conectado como:</strong> <?= htmlspecialchars($_SESSION['rh_user']) ?></div>

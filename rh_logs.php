@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/inc/functions.php';
-rh_authenticate();
+
+// Verifica autenticação
+if(empty($_SESSION['rh_user'])) {
+    header('Location: rh_login.php');
+    exit;
+}
 
 $q = isset($_GET['q']) ? trim($_GET['q']) : '';
 $action_filter = isset($_GET['action']) ? $_GET['action'] : '';

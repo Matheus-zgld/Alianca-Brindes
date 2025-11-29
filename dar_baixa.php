@@ -1,6 +1,12 @@
 <?php
 require_once __DIR__ . '/inc/functions.php';
 
+// Verifica autenticação
+if(empty($_SESSION['rh_user'])) {
+    header('Location: rh_login.php');
+    exit;
+}
+
 if($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: /rh.php'); exit;
 }

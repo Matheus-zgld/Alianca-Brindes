@@ -159,7 +159,7 @@ function rh_authenticate() {
     }
     
     // Não autenticado: redireciona para login
-    header('Location: /rh_login.php');
+    header('Location: rh_login.php');
     exit;
 }
 

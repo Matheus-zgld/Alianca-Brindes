@@ -12,7 +12,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['rh_user'] = $username;
         $_SESSION['login_time'] = time();
         try { log_event('RH_LOGIN', '', '', '', 'Login RH: ' . $username); } catch(Exception $e) {}
-        header('Location: /rh.php');
+        header('Location: rh.php');
         exit;
     } else {
         $error = 'Usuário ou senha incorretos.';
