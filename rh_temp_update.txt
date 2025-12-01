@@ -1,0 +1,40 @@
+INSTRUÇÕES DE ATUALIZAÇÃO MANUAL:
+
+===== ARQUIVO: rh.php =====
+
+1. Após a linha 59 (após "$resgatados = $st->fetchAll(PDO::FETCH_ASSOC);"), ADICIONAR:
+
+    $log_file=__DIR__.'/data_log.csv';
+    $rh_users_map=[];
+    if(file_exists($log_file)){
+        $lines=file($log_file,FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
+        foreach($lines as $line){
+            $cols=str_getcsv($line);
+            if(count($cols)>=8&&strtolower($cols[1])==='dar_baixa'){
+                $key=$cols[2].':'.$cols[3];
+                if(preg_match('/RH:\s*(\S+)/',$cols[7],$m)){
+                    $rh_users_map[$key]=$m[1];
+                }
+            }
+        }
+    }
+
+2. Procurar a linha "<tr><th>Nome</th><th>Matrícula</th><th>CPF</th><th>Data</th></tr>" e SUBSTITUIR por:
+
+<tr><th>Nome</th><th>Matrícula</th><th>CPF</th><th>Data</th><th>RH</th></tr>
+
+3. Procurar a linha com "</td>" após "data_resgate" e ADICIONAR ANTES do "</tr>":
+
+<td><?php $key=$r['cpf'].':'.$r['matricula'];echo isset($rh_users_map[$key])?htmlspecialchars($rh_users_map[$key]):'-';?></td>
+
+===== ARQUIVO: rh_logs.php =====
+
+1. Procurar "<tr><th>Data/Hora</th><th>Ação</th><th>Nome</th><th>CPF</th><th>Matrícula</th><th>Detalhes</th></tr>" e SUBSTITUIR por:
+
+<tr><th>Data/Hora</th><th>Ação</th><th>Nome</th><th>CPF</th><th>Matrícula</th><th>Usuário RH</th><th>Detalhes</th></tr>
+
+2. Procurar 'colspan="6"' e SUBSTITUIR por 'colspan="7"'
+
+3. No loop dos logs, ADICIONAR ANTES da linha com "$log['details']":
+
+<td><?php if(preg_match('/RH:\s*(\S+)/',$log['details'],$m)){echo htmlspecialchars($m[1]);}else{echo '-';}?></td>

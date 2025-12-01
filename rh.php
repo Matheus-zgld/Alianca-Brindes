@@ -58,6 +58,20 @@ try {
     
     $st = $pdo->query('SELECT nome_completo, matricula, cpf, data_resgate FROM funcionarios WHERE brinde_status=1 ORDER BY data_resgate DESC LIMIT 20');
     $resgatados = $st->fetchAll(PDO::FETCH_ASSOC);
+    $log_file=__DIR__.'/data_log.csv';
+    $rh_users_map=[];
+    if(file_exists($log_file)){
+        $lines=file($log_file,FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
+        foreach($lines as $line){
+            $cols=str_getcsv($line);
+            if(count($cols)>=8&&strtolower($cols[1])==='dar_baixa'){
+                $key=$cols[2].':'.$cols[3];
+                if(preg_match('/RH:\s*(\S+)/',$cols[7],$m)){
+                    $rh_users_map[$key]=$m[1];
+                }
+            }
+        }
+    }
 } catch(Throwable $e) {
     die('Erro: ' . htmlspecialchars($e->getMessage()));
 }
@@ -139,13 +153,14 @@ td{word-break:break-word}
 <h2 style="margin-top:34px;text-align:center">Últimos Brindes Entregues (<?=count($resgatados)?>)</h2>
 <div class="table-wrap">
 <table>
-<tr><th>Nome</th><th>Matrícula</th><th>CPF</th><th>Data</th></tr>
+<tr><th>Nome</th><th>Matrícula</th><th>CPF</th><th>Data</th><th>RH</th></tr>
 <?php foreach($resgatados as $r): ?>
 <tr>
 <td><?=htmlspecialchars($r['nome_completo'])?></td>
 <td><?=htmlspecialchars($r['matricula'])?></td>
 <td><?=htmlspecialchars($r['cpf'])?></td>
 <td><?php $dt=$r['data_resgate'];if($dt){$p=explode(' ',$dt);echo htmlspecialchars(date('d-m-y',strtotime($p[0])).(isset($p[1])?' '.$p[1]:''));}?></td>
+<td><?php $key=$r['cpf'].':'.$r['matricula'];echo isset($rh_users_map[$key])?htmlspecialchars($rh_users_map[$key]):'-';?></td>
 </tr>
 <?php endforeach; ?>
 </table>
@@ -166,24 +181,50 @@ document.addEventListener('DOMContentLoaded',function(){
         var isSecure=window.location.protocol==='https:'||window.location.hostname==='localhost';
         var isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if(!isSecure&&isMobile){
-            reader.innerHTML='<input type="file" accept="image/*" capture="environment" style="width:100%;padding:15px;border:2px dashed #000080;border-radius:10px;background:#fff;cursor:pointer" id="fileInput"><p style="text-align:center;margin-top:10px;color:#666;font-size:13px">Tire uma foto do QR Code</p>';
-            document.getElementById('fileInput').addEventListener('change',function(e){
-                var file=e.target.files[0];
-                if(file){
-                    reader.innerHTML='<p style="text-align:center;color:#000080;margin:20px 0">Processando imagem...</p>';
-                    var html5QrCode=new Html5Qrcode('reader');
-                    html5QrCode.scanFile(file,true).then(function(txt){
-                        onSuccess(txt);
-                    }).catch(function(err){
-                        reader.innerHTML='<div style="background:#ffecec;color:#b00020;padding:12px;border-radius:8px;margin:10px 0;text-align:center">Erro ao ler QR Code. Tente novamente com melhor iluminação.</div><input type="file" accept="image/*" capture="environment" style="width:100%;padding:15px;border:2px dashed #000080;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;margin-top:10px" id="fileInput2">';
-                        document.getElementById('fileInput2').addEventListener('change',arguments.callee);
+            reader.innerHTML='<label onclick="startCamera()" style="display:block;background:linear-gradient(135deg,#000080,#0000ad);color:#FFD700;padding:20px;border-radius:12px;cursor:pointer;text-align:center;box-shadow:0 4px 12px rgba(0,0,128,0.3)"><div style="font-size:48px;margin-bottom:10px">📷</div><div style="font-size:18px;font-weight:700;margin-bottom:5px">Escanear QR Code</div><div style="font-size:13px;opacity:0.9">Toque aqui para abrir câmera</div></label>';
+            window.startCamera=function(){
+                reader.innerHTML='<div id="scanner-container" style="width:100%;max-width:400px;margin:0 auto"></div><button onclick="stopCamera()" style="width:100%;background:#c62828;color:#fff;padding:12px;border:none;border-radius:8px;margin-top:10px;font-weight:600;cursor:pointer">Cancelar</button>';
+                var html5QrcodeScanner=new Html5QrcodeScanner(
+                    "scanner-container",
+                    {fps:10,qrbox:{width:250,height:250},aspectRatio:1.0},
+                    false
+                );
+                html5QrcodeScanner.render(function(decodedText){
+                    html5QrcodeScanner.clear();
+                    onSuccess(decodedText);
+                },function(error){});
+                window.currentScanner=html5QrcodeScanner;
+                setTimeout(function(){
+                    var texts={'Start Scanning':'Iniciar Escaneamento','Stop Scanning':'Parar Escaneamento','Choose Image':'Escolher Imagem','Request Camera Permissions':'Solicitar Permissões da Câmera','Scanning':'Escaneando','Select Camera':'Selecionar Câmera','Or drop an image to scan':'Ou arraste uma imagem para escanear','Camera based scan':'Escanear com câmera','File based scan':'Escanear arquivo','torch':'Lanterna','Torch':'Lanterna'};
+                    document.querySelectorAll('#scanner-container *').forEach(function(el){
+                        if(el.childNodes.length===1&&el.childNodes[0].nodeType===3){
+                            var txt=el.textContent.trim();
+                            if(texts[txt])el.textContent=texts[txt];
+                        }
+                        if(el.title&&texts[el.title])el.title=texts[el.title];
                     });
+                },500);
+            };
+            window.stopCamera=function(){
+                if(window.currentScanner){
+                    window.currentScanner.clear();
                 }
-            });
+                reader.innerHTML='<label onclick="startCamera()" style="display:block;background:linear-gradient(135deg,#000080,#0000ad);color:#FFD700;padding:20px;border-radius:12px;cursor:pointer;text-align:center;box-shadow:0 4px 12px rgba(0,0,128,0.3)"><div style="font-size:48px;margin-bottom:10px">📷</div><div style="font-size:18px;font-weight:700;margin-bottom:5px">Escanear QR Code</div><div style="font-size:13px;opacity:0.9">Toque aqui para abrir câmera</div></label>';
+            };
         }else{
             var config={fps:10,qrbox:isMobile?{width:200,height:200}:{width:250,height:250},rememberLastUsedCamera:true,showTorchButtonIfSupported:true,aspectRatio:1.0};
             var scanner=new Html5QrcodeScanner('reader',config,false);
             scanner.render(onSuccess,onFail);
+            setTimeout(function(){
+                var texts={'Start Scanning':'Iniciar Escaneamento','Stop Scanning':'Parar Escaneamento','Choose Image':'Escolher Imagem','Request Camera Permissions':'Solicitar Permissões da Câmera','Scanning':'Escaneando','Select Camera':'Selecionar Câmera','Or drop an image to scan':'Ou arraste uma imagem para escanear','Camera based scan':'Escanear com câmera','File based scan':'Escanear arquivo','torch':'Lanterna','Torch':'Lanterna'};
+                document.querySelectorAll('#reader *').forEach(function(el){
+                    if(el.childNodes.length===1&&el.childNodes[0].nodeType===3){
+                        var txt=el.textContent.trim();
+                        if(texts[txt])el.textContent=texts[txt];
+                    }
+                    if(el.title&&texts[el.title])el.title=texts[el.title];
+                });
+            },500);
         }
   }catch(e){
     reader.innerHTML='<p style="color:#b00020;text-align:center">Erro: '+e.message+'</p>';

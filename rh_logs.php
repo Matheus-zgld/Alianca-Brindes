@@ -9,10 +9,10 @@ if(file_exists($log_file)){
     $lines=file($log_file,FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
     foreach($lines as $line){
         $cols=str_getcsv($line);
-        if(count($cols)>=6){
+        if(count($cols)>=8){
             $action_lower=strtolower($cols[1]);
             if($cols[1]!=='action'&&strpos($cols[0],'31-12-69')===false&&$action_lower!=='rh_login'&&$action_lower!=='rh_logout'){
-                $logs[]=['timestamp'=>$cols[0],'action'=>$cols[1],'cpf'=>$cols[2],'matricula'=>$cols[3],'nome'=>$cols[4],'details'=>$cols[5]];
+                $logs[]=['timestamp'=>$cols[0],'action'=>$cols[1],'cpf'=>$cols[2],'matricula'=>$cols[3],'nome'=>$cols[4],'remote_addr'=>$cols[5],'user_agent'=>$cols[6],'extra'=>$cols[7]];
             }
         }
     }
@@ -99,9 +99,9 @@ th,td{padding:10px 8px;font-size:12px;white-space:nowrap}
 <h2 style="text-align:center;color:#000080">Total de Registros: <?=count($logs)?></h2>
 <div class="table-wrap">
 <table>
-<tr><th>Data/Hora</th><th>Ação</th><th>Nome</th><th>CPF</th><th>Matrícula</th><th>Detalhes</th></tr>
+<tr><th>Data/Hora</th><th>Ação</th><th>Nome</th><th>CPF</th><th>Matrícula</th><th>Usuário RH</th><th>Detalhes</th></tr>
 <?php if(empty($logs)): ?>
-<tr><td colspan="6" style="text-align:center;padding:30px;color:#666">Nenhum log encontrado</td></tr>
+<tr><td colspan="7" style="text-align:center;padding:30px;color:#666">Nenhum log encontrado</td></tr>
 <?php else: ?>
 <?php foreach($logs as $log): ?>
 <tr>
@@ -110,7 +110,8 @@ th,td{padding:10px 8px;font-size:12px;white-space:nowrap}
 <td><?=htmlspecialchars($log['nome'])?></td>
 <td><?=htmlspecialchars($log['cpf'])?></td>
 <td><?=htmlspecialchars($log['matricula'])?></td>
-<td><?=htmlspecialchars($log['details'])?></td>
+<td><?php if(isset($log['extra'])&&preg_match('/RH:\s*(\S+)/',$log['extra'],$m)){echo htmlspecialchars($m[1]);}else{echo '-';}?></td>
+<td><?=isset($log['extra'])?htmlspecialchars($log['extra']):'-'?></td>
 </tr>
 <?php endforeach; ?>
 <?php endif; ?>
