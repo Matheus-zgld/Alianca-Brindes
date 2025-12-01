@@ -16,8 +16,7 @@ function render_content(){
             </div>
         </div>
 
-        <label for="nome" style="display:block; text-align:left; margin-top:12px; font-weight:600;">Nome Completo</label>
-        <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
+        <!-- Campo 'Nome' removido a pedido: manter apenas CPF e Matrícula -->
 
         <div id="cpf-row" style="display: block;">
             <label for="cpf" style="display:block; text-align:left; margin-top:12px; font-weight:600;">CPF</label>
@@ -27,6 +26,7 @@ function render_content(){
         <div id="mat-row" style="display: none;">
             <label for="matricula" style="display:block; text-align:left; margin-top:12px; font-weight:600;">Matrícula</label>
             <input type="text" id="matricula" name="matricula" placeholder="Digite sua matrícula">
+            <div id="mat-help" style="display:none; margin-top:8px; color:#6b6b6b; font-size:13px; text-align:left;">Atenção: a matrícula começa com <strong>0</strong>. Inclua o zero no início do número (ex.: <em>012345</em>).</div>
         </div>
 
         <button type="submit" class="btn-primary" style="width:100%; margin-top:20px; padding:14px; text-align:center; font-size:16px;">Consultar/Gerar QR Code</button>
@@ -50,6 +50,7 @@ function render_content(){
         const matRow = document.getElementById('mat-row');
         const cpfInput = document.getElementById('cpf');
         const matInput = document.getElementById('matricula');
+        const matHelp = document.getElementById('mat-help');
 
         function setActive(use){
             if(use === 'cpf'){
@@ -58,12 +59,14 @@ function render_content(){
                 btnMat.classList.remove('active'); btnMat.style.background = '#ffffff'; btnMat.style.color = '#000080';
                 cpfRow.style.display = 'block'; matRow.style.display = 'none';
                 cpfInput.required = true; matInput.required = false;
+                if(matHelp) matHelp.style.display = 'none';
             } else {
                 btnMat.classList.add('active');
                 btnMat.style.background = '#000080'; btnMat.style.color = '#FFD700';
                 btnCpf.classList.remove('active'); btnCpf.style.background = '#ffffff'; btnCpf.style.color = '#000080';
                 cpfRow.style.display = 'none'; matRow.style.display = 'block';
                 cpfInput.required = false; matInput.required = true;
+                if(matHelp) matHelp.style.display = 'block';
             }
         }
 

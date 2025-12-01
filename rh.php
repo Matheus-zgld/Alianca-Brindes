@@ -121,6 +121,7 @@ td{word-break:break-word}
 <div class="nav">
 <a class="btn" href="index.php">Área do Funcionário</a>
 <a class="btn" href="rh_funcionarios.php">Verificar Funcionários</a>
+<a class="btn" href="rh_export.php">Exportar Planilha</a>
 <a class="btn" href="rh_logs.php">Ver Logs</a>
 <a class="btn danger" href="rh_logout.php">Sair</a>
 </div>

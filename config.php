@@ -31,7 +31,7 @@ define('LOG_FILE', BASE_PATH . '/data_log.csv');
 
 // ========== CONFIGURAÇÕES DE SEGURANÇA ==========
 
-// Sessão segura (recomendado em produção)
+// Sessão segura
 if (ENVIRONMENT === 'production') {
     ini_set('session.cookie_httponly', 1);
     ini_set('session.cookie_secure', 0); // Mude para 1 se usar HTTPS
@@ -56,7 +56,12 @@ $RH_USERS = [
     'jose.neto' => 'alianca1927',
     'sara.guimaraes' => 'alianca1927',
     'patricia.simoes' => 'alianca1927',
-    'liberato.silva' => 'alianca1927'
+    'liberato.silva' => 'alianca1927',
+    'julia.santos' => 'alianca1927',
+    'amanda.dinardo' => 'alianca1927',
+    'sirlene.sales' => 'alianca1927',
+    'douglas.passos' => 'alianca1927',
+    'anderson.nascimento' => 'alianca1927'
 ];
 
 // ========== CONFIGURAÇÕES DE QR CODE ==========
