@@ -32,13 +32,18 @@ $fg_color = FG_COLOR;
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: linear-gradient(135deg, <?= $bg_color ?> 0%, #0000CD 100%);
             color: #fff;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            background-color: <?= $bg_color ?>; /* fallback */
+            background-image: url('http://brindes.alianca.ind.br/imgs/fundo.png');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
         .container {
             background: white;

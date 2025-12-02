@@ -4,6 +4,8 @@ require_once __DIR__ . '/../config.php';
 if(!isset($bg_color)) $bg_color = BG_COLOR;
 if(!isset($fg_color)) $fg_color = FG_COLOR;
 if(!isset($logo_url)) $logo_url = LOGO_URL;
+// URL da imagem de fundo
+$bg_image_url = defined('BG_IMAGE_URL') ? BG_IMAGE_URL : (BASE_URL . '/imgs/fundo.png');
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -20,7 +22,7 @@ if(!isset($logo_url)) $logo_url = LOGO_URL;
     <style>
         :root { --primary-color: <?= $bg_color ?>; --accent: <?= $fg_color ?>; --surface: #ffffff; --muted:#6b6b6b; --text:#121212; }
         * { box-sizing: border-box; }
-        body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial; margin:0; padding:0; color:var(--surface); min-height:100vh; display:flex; flex-direction:column; align-items:center; background-color: var(--primary-color); background-image: url('../imgs/fundo.png'); !important; background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed; }
+        body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial; margin:0; padding:0; color:var(--surface); min-height:100vh; display:flex; flex-direction:column; align-items:center; background-color: var(--primary-color); background-image: url('<?= htmlspecialchars($bg_image_url) ?>'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed; }
         .logo-wrapper { text-align:center; padding:18px; width:100%; }
         .logo-wrapper img { max-height:86px; display:inline-block; margin:0 auto; }
         .container { background-color: var(--surface); color: var(--text); padding:30px; border-radius:12px; box-shadow:0 8px 30px rgba(2,6,23,0.08); width:95%; max-width:980px; margin:18px auto; margin-bottom:28px; }

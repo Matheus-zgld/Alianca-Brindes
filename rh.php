@@ -82,7 +82,7 @@ try {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Área RH</title>
 <style>
-body{background:linear-gradient(135deg,#000080 0%,#0000ad 100%);color:#fff;font-family:Arial,Helvetica,sans-serif;padding:40px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;margin:0}
+body{color:#fff;font-family:Arial,Helvetica,sans-serif;padding:40px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;margin:0;background-color:#000080;/* fallback */background-image:url('http://brindes.alianca.ind.br/imgs/fundo.png');background-size:cover;background-position:center center;background-repeat:no-repeat;background-attachment:fixed}
 .logo-wrapper{text-align:center;padding:18px;width:100%;}
 .logo-wrapper img{max-height:86px;display:inline-block;margin:0 auto;}
 .wrap{background:#fff;color:#222;border-radius:18px;padding:42px 46px;box-shadow:0 12px 40px rgba(0,0,0,.35);max-width:900px;width:100%;box-sizing:border-box;margin:18px auto}

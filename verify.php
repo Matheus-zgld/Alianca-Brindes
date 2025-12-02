@@ -22,10 +22,15 @@ require_once __DIR__ . '/config.php';
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #000080 0%, #0000CD 100%);
             color: #333;
             padding: 20px;
             min-height: 100vh;
+            background-color: #000; /* fallback */
+            background-image: url('http://brindes.alianca.ind.br/imgs/fundo.png');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
         .container {
             max-width: 900px;
