@@ -39,7 +39,7 @@ $fg_color = FG_COLOR;
             justify-content: center;
             padding: 20px;
             background-color: <?= $bg_color ?>; /* fallback */
-            background-image: url('http://brindes.alianca.ind.br/imgs/fundo.png');
+            background-image: url('./imgs/fundo.png');
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;

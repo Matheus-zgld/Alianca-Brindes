@@ -40,7 +40,7 @@ try{
 <title>Verificar Funcionários - Área RH</title>
 <style>
 html{margin:0;padding:0}
-body{color:#fff;font-family:Arial,Helvetica,sans-serif;padding:40px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;margin:0;background-color:#000080;/* fallback */background-image:url('http://brindes.alianca.ind.br/imgs/fundo.png');background-size:cover;background-position:center center;background-repeat:no-repeat;background-attachment:fixed}
+body{color:#fff;font-family:Arial,Helvetica,sans-serif;padding:40px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;margin:0;background-image:url('./imgs/fundo.png');background-size:cover;background-position:center center;background-repeat:no-repeat;background-attachment:fixed}
 .logo-wrapper{text-align:center;padding:18px;width:100%;}
 .logo-wrapper img{max-height:86px;display:inline-block;margin:0 auto;}
 .wrap{background:#fff;color:#222;border-radius:18px;padding:42px 46px;box-shadow:0 12px 40px rgba(0,0,0,.35);max-width:1200px;width:100%;box-sizing:border-box;margin:18px auto}
@@ -66,7 +66,7 @@ tr:nth-child(even){background:#f7f9fc}
 .badge-resgatado{background:#d4edda;color:#155724;padding:6px 12px;border-radius:20px;font-weight:600;font-size:0.85em;display:inline-block}
 .badge-pendente{background:#f8d7da;color:#721c24;padding:6px 12px;border-radius:20px;font-weight:600;font-size:0.85em;display:inline-block}
 @media (max-width:768px){
-body{padding:10px;margin:0;background-color:#000080;background-image:url('http://brindes.alianca.ind.br/imgs/fundo.png');background-size:cover;background-position:center center;background-repeat:no-repeat;background-attachment:fixed}
+body{padding:10px;margin:0;background-image:url('./imgs/fundo.png');background-size:cover;background-position:center center;background-repeat:no-repeat;background-attachment:fixed}
 .wrap{padding:15px 12px;border-radius:12px;background:#fff;color:#222}
 h1{font-size:1.3rem;margin-bottom:10px}
 .nav{gap:8px}

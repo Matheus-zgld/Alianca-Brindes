@@ -26,7 +26,7 @@ require_once __DIR__ . '/config.php';
             padding: 20px;
             min-height: 100vh;
             background-color: #000; /* fallback */
-            background-image: url('http://brindes.alianca.ind.br/imgs/fundo.png');
+            background-image: url('./imgs/fundo.png');
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;

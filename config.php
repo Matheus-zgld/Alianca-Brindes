@@ -50,8 +50,8 @@ define('LOGO_URL', BASE_URL . '/imgs/logo.png');
 // Imagem de fundo (padrão local). Pode ser alterada para uma URL externa.
 // Exemplo externo (Imgur direto): 'https://i.imgur.com/XXXXXXXX.jpg'
 if(!defined('BG_IMAGE_URL')) {
-    // Use absolute production URL for consistent loading in local and prod
-    define('BG_IMAGE_URL', 'http://brindes.alianca.ind.br/imgs/fundo.png');
+    // Use caminho local relativo
+    define('BG_IMAGE_URL', './imgs/fundo.png');
 }
 
 // ========== CONFIGURAÇÕES DE USUÁRIOS RH ==========
