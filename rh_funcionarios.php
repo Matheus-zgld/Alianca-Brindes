@@ -1,11 +1,13 @@
 <?php
 session_start();
 if(empty($_SESSION['rh_user'])){header('Location: rh_login.php');exit;}
+$configPath = __DIR__ . '/inc/functions.php';
+if (file_exists($configPath)) require_once $configPath;
 $q='';$status='';$funcionarios=[];
 if(isset($_GET['q']))$q=trim($_GET['q']);
 if(isset($_GET['status']))$status=$_GET['status'];
 try{
-    $pdo=new PDO('sqlite:'.__DIR__.'/brindes.db');
+    $pdo = function_exists('get_db') ? get_db() : new PDO('sqlite:'.__DIR__.'/brindes.db');
     $pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
     $rows=$pdo->query('SELECT nome_completo,cpf,matricula,brinde_status,data_resgate FROM funcionarios ORDER BY nome_completo')->fetchAll(PDO::FETCH_ASSOC);
     foreach($rows as $r){

@@ -23,8 +23,19 @@ define('BASE_URL', 'http://brindes.alianca.ind.br');
 
 // ========== CONFIGURAÇÕES DE BANCO DE DADOS ==========
 
-// Caminho do arquivo SQLite
+// ESCOLHA O TIPO DE BANCO: 'sqlite' ou 'mysql'
+define('DB_TYPE', 'mysql'); // Mude para 'sqlite' se quiser usar SQLite
+
+// ----- CONFIGURAÇÕES SQLITE (Desabilitado) -----
+// Caminho do arquivo SQLite (usado se DB_TYPE = 'sqlite')
 define('DB_PATH', BASE_PATH . '/brindes.db');
+
+// ----- CONFIGURAÇÕES MYSQL (Ativo) -----
+define('DB_HOST', 'localhost');
+define('DB_USER', 'aliancaind_brindes');
+define('DB_PASS', 'lAigr#^p6Ub=');
+define('DB_NAME', 'aliancaind_brindes');
+define('DB_PORT', 3306);
 
 // Caminho do arquivo de log
 define('LOG_FILE', BASE_PATH . '/data_log.csv');
@@ -68,7 +79,11 @@ $RH_USERS = [
     'amanda.dinardo' => 'alianca1927',
     'sirlene.sales' => 'alianca1927',
     'douglas.passos' => 'alianca1927',
-    'anderson.nascimento' => 'alianca1927'
+    'anderson.nascimento' => 'alianca1927',
+    'gabriel.carneiro' => 'alianca1927',
+    'yasmin.silva' => 'alianca1927',
+    'anna.santos' => 'alianca1927',
+    'mauro.silva' => 'alianca1927'
 ];
 
 // ========== CONFIGURAÇÕES DE QR CODE ==========

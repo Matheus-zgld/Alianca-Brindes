@@ -10,10 +10,23 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 function get_db() {
-    $dsn = 'sqlite:' . DB_PATH;
-    $pdo = new PDO($dsn);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    return $pdo;
+    if (DB_TYPE === 'mysql') {
+        // Conexão MySQL
+        try {
+            $dsn = 'mysql:host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME . ';charset=utf8mb4';
+            $pdo = new PDO($dsn, DB_USER, DB_PASS);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $pdo;
+        } catch (PDOException $e) {
+            die('Erro ao conectar MySQL: ' . $e->getMessage());
+        }
+    } else {
+        // Conexão SQLite (padrão)
+        $dsn = 'sqlite:' . DB_PATH;
+        $pdo = new PDO($dsn);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
+    }
 }
 
 function log_event($action, $cpf = '', $matricula = '', $nome = '', $extra = '') {

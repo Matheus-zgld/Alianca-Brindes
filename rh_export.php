@@ -2,12 +2,15 @@
 session_start();
 if(empty($_SESSION['rh_user'])) { header('Location: rh_login.php'); exit; }
 
+$configPath = __DIR__ . '/inc/functions.php';
+if (file_exists($configPath)) require_once $configPath;
+
 try {
-    $pdo = new PDO('sqlite:' . __DIR__ . '/brindes.db');
+    $pdo = function_exists('get_db') ? get_db() : new PDO('sqlite:' . __DIR__ . '/brindes.db');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // build map of who did the baixa from data_log.csv
-    $log_file = __DIR__ . '/data_log.csv';
+    $log_file = defined('LOG_FILE') ? LOG_FILE : (__DIR__ . '/data_log.csv');
     $rh_users_map = [];
     if (file_exists($log_file)) {
         $lines = file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);

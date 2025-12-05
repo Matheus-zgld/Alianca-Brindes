@@ -5,6 +5,9 @@ if (empty($_SESSION['rh_user'])) {
     exit;
 }
 
+// Usa a configuração centralizada (inclui DB e LOG)
+require_once __DIR__ . '/inc/functions.php';
+
 $error = '';
 $info = '';
 $qr_data = '';
@@ -13,8 +16,7 @@ $resgatado = false;
 $resgatados = [];
 
 try {
-    $pdo = new PDO('sqlite:' . __DIR__ . '/brindes.db');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo = get_db();
 
     if (isset($_POST['acao']) && $_POST['acao'] === 'baixar' && isset($_POST['cpf'], $_POST['matricula'])) {
         $cpf = preg_replace('/\D/', '', $_POST['cpf']);
@@ -27,8 +29,8 @@ try {
         } elseif (intval($f['brinde_status']) === 1) {
             $error = 'Brinde já entregue';
         } else {
-            $pdo->prepare('UPDATE funcionarios SET brinde_status=1, data_resgate=datetime("now","localtime") WHERE cpf=? AND matricula=?')->execute([$cpf, $matricula]);
-            $log_file = __DIR__ . '/data_log.csv';
+            $pdo->prepare('UPDATE funcionarios SET brinde_status=1, data_resgate=NOW() WHERE cpf=? AND matricula=?')->execute([$cpf, $matricula]);
+            $log_file = LOG_FILE;
             $ts = date('Y-m-d H:i:s');
             $remote = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
             $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
